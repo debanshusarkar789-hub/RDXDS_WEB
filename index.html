@@ -160,8 +160,11 @@
         .folder-science h3 { color: #39ff14; }
         .folder-english:hover { box-shadow: 0 8px 20px rgba(255, 0, 255, 0.3), inset 0 0 8px #ff00ff; border-color: #ff00ff; }
         .folder-english h3 { color: #ff00ff; }
-        .folder-it:hover { box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3), inset 0 0 8px #ffc107; border-color: #ffc107; }
-        .folder-it h3 { color: #ffc107; }
+        
+        /* AI Subject Hover Effect (Replaced IT) */
+        .folder-ai:hover { box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3), inset 0 0 8px #ffc107; border-color: #ffc107; }
+        .folder-ai h3 { color: #ffc107; }
+
         .folder-sanskrit:hover { box-shadow: 0 8px 20px rgba(0, 150, 136, 0.3), inset 0 0 8px #009688; border-color: #009688; }
         .folder-sanskrit h3 { color: #009688; }
         
@@ -181,12 +184,39 @@
              box-shadow: 0 0 15px #ffc107, 0 0 30px #ffc107;
         }
         
-        .btn-neon-green {
-             box-shadow: 0 0 5px #39ff14;
+        /* --- EXTRA RESOURCES BUTTON GLOW (Now uses the former DPP Green Glow) --- */
+        .btn-neon-green-dpp {
+             box-shadow: 0 0 5px #39ff14; 
         }
-        .btn-neon-green:hover {
+        .btn-neon-green-dpp:hover {
              box-shadow: 0 0 15px #39ff14, 0 0 30px #39ff14;
         }
+        /* --- End Extra Resources Glow --- */
+        
+        /* --- VIEW FULL PLAN BUTTON GLOW (ELECTRIC BLUE/CYAN) --- */
+        .btn-neon-blue-plan {
+             /* Strong, electric blue/cyan glow for Gemini-like effect */
+             box-shadow: 0 0 5px #06b6d4; /* Cyan-500 */
+        }
+        .btn-neon-blue-plan:hover {
+             /* Intense, multi-level glow on hover */
+             box-shadow: 0 0 15px #06b6d4, 0 0 30px #06b6d4, 0 0 50px #06b6d4;
+        }
+        
+        /* --- TEST LIVE BUTTON GLOW (Silver White Glow) --- */
+        .btn-neon-silver {
+             /* Light gray/silver color for the glow */
+             box-shadow: 0 0 5px #e0e0e0; 
+             background-color: #1a1a1a; /* Dark background */
+             border: 1px solid #e0e0e0;
+        }
+        .btn-neon-silver:hover {
+             /* Intense, multi-level glow on hover */
+             box-shadow: 0 0 15px #e0e0e0, 0 0 30px #e0e0e0, 0 0 50px #e0e0e0;
+             background-color: #333333; /* Slightly lighter on hover */
+             color: #fff;
+        }
+
 
         /* ======================================= */
         /* KEYFRAMES (Shared by Hero Button) */
@@ -248,6 +278,74 @@
             transition: all 0.3s;
         }
         
+        /* Roadmap Timeline Custom Styles */
+        .timeline-container {
+            position: relative;
+            padding-left: 20px; /* Space for the line */
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #a855f7, #06b6d4, #39ff14);
+            border-radius: 2px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 24px;
+            cursor: default;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -12px;
+            top: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 4px solid #050505; /* Matches body background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10;
+            box-shadow: 0 0 10px currentColor; /* Dynamic glow based on phase color */
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            transform: scale(1.1);
+        }
+
+        .timeline-content {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(5px);
+            padding: 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .timeline-item:hover .timeline-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            /* Updated hover shadow to match the new electric blue/cyan theme */
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.6); 
+        }
+
+        /* NEW: Roadmap Modal Custom Adjustments for better display */
+        .roadmap-modal-content {
+            max-height: 90vh; /* Limit height to 90% of viewport height */
+            overflow-y: auto; /* Enable scrolling for the content itself */
+        }
+        
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -298,12 +396,13 @@
                 cssClass: 'folder-english',
                 playlistUrl: 'https://youtube.com/playlist?list=PLvN1F_xGUFE7qm5BkqDZWazpb1cmxdbXb&si=3j8lsjaU4MIF9ypu'
             },
-            'IT': {
-                color: '#ffc107',
-                icon: 'fa-code',
-                description: 'Information Technology, coding basics, and digital literacy. (Playlist Link)',
+            // --- CHANGED FROM IT TO AI ---
+            'AI': {
+                color: '#ffc107', // Retained yellow/gold color
+                icon: 'fa-brain', // Changed icon for AI theme
+                description: 'Artificial Intelligence, machine learning concepts, and basic Python. (Playlist Link)', // Updated description
                 progress: 10,
-                cssClass: 'folder-it',
+                cssClass: 'folder-ai', // Changed class name
                 playlistUrl: 'https://youtube.com/playlist?list=PLvN1F_xGUFE6AgrUleAkZVXsKdjzkHBMQ&si=zniYuUlhDtgl46DU'
             },
             'SANSKRIT': {
@@ -315,6 +414,58 @@
                 playlistUrl: 'https://youtube.com/playlist?list=PLvN1F_xGUFE7u0dJdsp9Cw2chVJ1Y3JiN&si=yRPJCoPjQDRNzC9X'
             }
         };
+        
+        // --- FULL ROADMAP DATA ---
+        const roadmapData = [
+            {
+                phase: "Phase 1: Foundation & Setup (Days 1-10)",
+                phaseColor: "#f87171", // Red-400 equivalent
+                tasks: [
+                    { day: 1, subject: "Maths", topic: "Real Numbers & Polynomials (L1-L4)" },
+                    { day: 3, subject: "Science", topic: "Chemical Reactions & Equations (L1-L3)" },
+                    { day: 5, subject: "SST", topic: "The Rise of Nationalism in Europe (L1-L3)" },
+                    { day: 7, subject: "English", topic: "A Letter to God (Literature & Grammar)" },
+                    // Updated IT to AI
+                    { day: 10, subject: "AI/Sanskrit", topic: "Intro to AI/Sanskrit Vyakaran Basics" }
+                ]
+            },
+            {
+                phase: "Phase 2: Core Subject Deep Dive (Days 11-25)",
+                phaseColor: "#fbbf24", // Yellow-400 equivalent
+                tasks: [
+                    { day: 12, subject: "Science", topic: "Acids, Bases & Salts (L4-L6)" },
+                    { day: 15, subject: "Maths", topic: "Pair of Linear Equations (L5-L8)" },
+                    { day: 18, subject: "SST", topic: "Nationalism in India & Resources (L4-L6)" },
+                    { day: 21, subject: "Science", topic: "Light Reflection & Refraction (Physics Start)" },
+                    { day: 25, subject: "English", topic: "The Thief's Story & Active/Passive Voice" }
+                ]
+            },
+            {
+                phase: "Phase 3: Completion & Integration (Days 26-40)",
+                phaseColor: "#4ade80", // Green-400 equivalent
+                tasks: [
+                    { day: 28, subject: "Maths", topic: "Quadratic Equations & AP Basics" },
+                    { day: 30, subject: "Science", topic: "Electricity & Magnetic Effects (Complete)" },
+                    { day: 34, subject: "SST", topic: "Power Sharing & Development (Civics/Eco L1-L4)" },
+                    { day: 37, subject: "Maths", topic: "Arithmetic Progressions (Advanced)" },
+                    // Updated IT to AI
+                    { day: 40, subject: "AI/Sanskrit", topic: "AI/Data Science Basics/Sanskrit Literature" }
+                ]
+            },
+            {
+                phase: "Phase 4: Revision & Testing (Days 41-45)",
+                phaseColor: "#22d3ee", // Cyan-400 equivalent
+                tasks: [
+                    { day: 41, subject: "ALL", topic: "Full Subject Recall & Formula Revision" },
+                    { day: 42, subject: "ALL", topic: "Full Syllabus Mock Test 1 (Timed)" },
+                    { day: 43, subject: "ALL", topic: "Error Analysis & Targeted Practice" },
+                    { day: 44, subject: "ALL", topic: "Focused Review of Weak Topics & Final Notes" },
+                    { day: 45, subject: "ALL", topic: "Final Full Syllabus Mock Test 2 & Analysis" }
+                ]
+            }
+        ];
+        // --- END ROADMAP DATA ---
+
 
         const targetDate = new Date("Jan 15, 2026 00:00:00").getTime();
         let redirectionIntervalId;
@@ -503,6 +654,55 @@
                 gridContainer.appendChild(link);
             });
         }
+        
+        /**
+         * Renders the 4-Phase Roadmap into the modal content area.
+         */
+        function renderRoadmap() {
+            const roadmapContent = document.getElementById('roadmap-content');
+            if (!roadmapContent) return;
+            roadmapContent.innerHTML = ''; // Clear previous content
+
+            roadmapData.forEach(phaseData => {
+                // 1. Create Phase Header
+                const phaseDiv = document.createElement('div');
+                phaseDiv.className = `mb-8 p-4 rounded-xl shadow-xl border border-gray-800 bg-gray-900/50`;
+                
+                phaseDiv.innerHTML = `
+                    <h3 class="text-2xl font-extrabold tracking-wide mb-4" style="color: ${phaseData.phaseColor}; text-shadow: 0 0 5px ${phaseData.phaseColor}50;">
+                        <i class="fa-solid fa-layer-group mr-2"></i> ${phaseData.phase}
+                    </h3>
+                `;
+
+                // 2. Create Timeline Container for Tasks
+                const timelineDiv = document.createElement('div');
+                timelineDiv.className = 'timeline-container mt-4';
+                
+                phaseData.tasks.forEach(task => {
+                    const taskItem = document.createElement('div');
+                    taskItem.className = 'timeline-item';
+                    
+                    // Use the phase color for the dot and its glow
+                    taskItem.innerHTML = `
+                        <div class="timeline-dot bg-black" style="color: ${phaseData.phaseColor}; background-color: ${phaseData.phaseColor};">
+                            ${task.day}
+                        </div>
+                        <div class="timeline-content">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                                <span class="text-lg font-bold text-white tracking-wider">${task.subject}</span>
+                                <span class="text-sm text-gray-400 font-mono">DAY ${task.day}</span>
+                            </div>
+                            <p class="text-gray-300 mt-1">${task.topic}</p>
+                        </div>
+                    `;
+                    timelineDiv.appendChild(taskItem);
+                });
+                
+                phaseDiv.appendChild(timelineDiv);
+                roadmapContent.appendChild(phaseDiv);
+            });
+        }
+
 
         // Window Load Handler
         window.onload = function() {
@@ -533,11 +733,27 @@
             if (extraResourcesLink) {
                 extraResourcesLink.onclick = (e) => handleDelayedRedirect(e, extraResourcesLink.getAttribute('data-href'), 5);
             }
-
+            
             // 5. Setup LIVE Stream button (Hero Section) for delayed redirect (10s delay)
             const liveStreamBtn = document.getElementById('live-stream-btn');
             if (liveStreamBtn) {
                 liveStreamBtn.onclick = (e) => handleDelayedRedirect(e, liveStreamBtn.getAttribute('data-href'), 10);
+            }
+            
+            // 6. Setup VIEW FULL PLAN button to open Roadmap Modal and render content
+            const viewPlanBtn = document.getElementById('view-full-plan-btn');
+            if (viewPlanBtn) {
+                viewPlanBtn.addEventListener('click', () => {
+                    renderRoadmap(); // Ensure roadmap is rendered on click
+                    document.getElementById('roadmap-modal').style.display = 'flex';
+                });
+            }
+            
+            // 7. Setup TEST LIVE button for delayed redirect (5s delay)
+            const testLiveLink = document.getElementById('test-live-link');
+            if (testLiveLink) {
+                // Using the provided link for the Test Live button
+                testLiveLink.onclick = (e) => handleDelayedRedirect(e, testLiveLink.getAttribute('data-href'), 5);
             }
         }
 
@@ -589,7 +805,7 @@
         </div>
         <span class="text-xs text-cyan-400 mb-12 tracking-widest font-bold">6/7 SUBJECTS ACQUIRED (100% SYLLABUS ACQUIRED)</span>
 
-        <!-- Enhanced Button Layout for Responsiveness -->
+        <!-- Modified Button Layout -->
         <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4 w-full max-w-4xl">
             
             <!-- START LEARNING BUTTON (Primary CTA) -->
@@ -603,20 +819,25 @@
             </button>
             
             <!-- ALL SUBJECT NOTES BUTTON -->
-            <a id="all-notes-link" data-href="https://drive.google.com/drive/folders/1zyTwmoMiZvZ2Cnl1EJol_JeOg0mDF6Pz?usp=drive_link" target="_blank" class="btn-neon border border-red-500 text-red-400 px-8 py-3 rounded-lg font-bold hover:bg-red-700 hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
+            <a id="all-notes-link" data-href="https://drive.google.com/drive/folders/1zyTwmoMiZvZ2Cnl1EJol_JeOg0mDF6P_?usp=drive_link" target="_blank" class="btn-neon border border-red-500 text-red-400 px-8 py-3 rounded-lg font-bold hover:bg-red-700 hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
                 <i class="fa-brands fa-google-drive"></i> ALL NOTES (DRIVE)
             </a>
             
-            <!-- EXTRA RESOURCES BUTTON -->
-            <a id="extra-resources-link" data-href="https://drive.google.com/drive/folders/1B_I5Ugvcp8VlB05eJh-c2Ts3D01XnHGi?usp=drive_link" target="_blank" class="btn-neon btn-neon-green border border-green-500 text-green-400 px-8 py-3 rounded-lg font-bold hover:bg-green-700 hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
+            <!-- EXTRA RESOURCES BUTTON (NOW GREEN WITH DPP GLOW) -->
+            <a id="extra-resources-link" data-href="https://drive.google.com/drive/folders/1B_I5Ugvcp8VlB05eJh-c2Ts3D01XnHGi?usp=drive_link" target="_blank" class="btn-neon btn-neon-green-dpp bg-green-600 text-white px-8 py-3 rounded-lg font-bold transition-all duration-300 flex items-center justify-center gap-2 hover:bg-green-500">
                 <i class="fa-solid fa-folder-open"></i> EXTRA RESOURCES
             </a>
-
-            <!-- VIEW FULL PLAN BUTTON -->
-            <button class="btn-neon border border-purple-500 text-purple-400 px-8 py-3 rounded-lg font-bold hover:bg-purple-500 hover:text-white transition-all duration-300">
-                VIEW FULL PLAN
+            
+            <!-- VIEW FULL PLAN BUTTON (ELECTRIC BLUE/CYAN) -->
+            <button id="view-full-plan-btn" class="btn-neon btn-neon-blue-plan bg-sky-500 text-white px-8 py-3 rounded-lg font-bold hover:bg-sky-400 transition-all duration-300 shadow-lg shadow-cyan-800/50 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-calendar-alt"></i> VIEW FULL PLAN
             </button>
             
+            <!-- TEST LIVE BUTTON (Silver White Glow) - LINK UPDATED HERE -->
+            <a id="test-live-link" data-href="https://drive.google.com/drive/folders/1rd1mJGmufkHa6I_EXg3ygB5kRGmO47oY?usp=sharing" target="_blank" class="btn-neon btn-neon-silver text-white px-8 py-3 rounded-lg font-bold transition-all duration-300 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-cloud-bolt"></i> TEST LIVE
+            </a>
+
             <!-- LIVE RED BUTTON (10s delay) - UPDATED LINK -->
             <a id="live-stream-btn" data-href="https://youtube.com/playlist?list=PLvN1F_xGUFE4qDgi5hPOjJOLiqmbAI2Qd&si=bm2DDI_gjiFhlhJ" target="_blank" class="w-full btn-neon bg-red-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-red-500 transition-all duration-300 shadow-lg flex items-center justify-center gap-2 live-red-glow mt-4">
                 <i class="fa-solid fa-signal text-lg"></i> <span class="tracking-widest">LIVE NOW - WATCH HERE!</span>
@@ -698,6 +919,38 @@
                     class="w-full bg-gray-700 text-white py-2 rounded-lg font-bold hover:bg-gray-600 transition-all duration-300">
                 <i class="fa-solid fa-xmark mr-2"></i> CANCEL REDIRECTION
             </button>
+        </div>
+    </div>
+
+    <!-- Full Roadmap Modal (New Structure) -->
+    <div id="roadmap-modal" class="fixed inset-0 bg-black bg-opacity-90 z-[300] hidden items-center justify-center p-4 overflow-y-auto">
+        <!-- Replaced border-4 border-blue-600 with border-4 border-sky-500 and shadow to cyan-600 -->
+        <div class="relative bg-gray-950 border-4 border-sky-500 rounded-xl w-full max-w-5xl my-8 shadow-[0_0_50px_rgba(6,182,212,0.8)] transform transition-all duration-500 roadmap-modal-content">
+            
+            <!-- Close Button -->
+            <button onclick="document.getElementById('roadmap-modal').style.display = 'none'" 
+                    class="sticky top-0 right-0 m-4 text-white text-3xl hover:text-red-500 transition duration-300 z-50 p-2 bg-gray-950 rounded-full">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+
+            <div class="p-6 md:p-10 pt-0">
+                <!-- Changed text-blue-400 to text-sky-400 -->
+                <h2 class="text-4xl md:text-5xl font-extrabold text-sky-400 mb-2 tracking-wider text-center border-b-2 border-sky-500/50 pb-2">
+                    <i class="fa-solid fa-sitemap mr-3"></i> CBSE CLASS 10 CRASH COURSE
+                </h2>
+                <p class="text-gray-400 text-center text-lg mb-8">
+                    45-Day Mission Roadmap | Phase-wise Syllabus Acquisition Plan
+                </p>
+    
+                <!-- Roadmap Content Container -->
+                <div id="roadmap-content" class="w-full max-w-4xl mx-auto py-4">
+                    <!-- Content generated by renderRoadmap() function will go here -->
+                </div>
+                
+                <p class="text-center text-sm text-gray-600 mt-10 border-t border-gray-800 pt-4">
+                    *This plan is an agile guide and may be subject to minor adjustments based on live session requirements.
+                </p>
+            </div>
         </div>
     </div>
 </body>
