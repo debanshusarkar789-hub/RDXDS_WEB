@@ -4,7 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>rdxdebanshu@7 | NT ABHAY 2025-26 (Playlist Focused)</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com">
+/* ================= COPY LINKS SCRIPT ================ */
+let liveLink1 = "";
+let liveLink2 = "";
+
+// Load daily links from JSON file
+fetch("/live-links.json")
+    .then(res => res.json())
+    .then(data => {
+        liveLink1 = data.link1;
+        liveLink2 = data.link2;
+    });
+
+// Show popup
+function openCopyLinksPopup() {
+    document.getElementById("copyLinksModal").style.display = "flex";
+}
+
+// Close popup
+function closeCopyLinksPopup() {
+    document.getElementById("copyLinksModal").style.display = "none";
+}
+
+// Copy Btns
+document.addEventListener("DOMContentLoaded", () => {
+    const b1 = document.getElementById("copyLink1Btn");
+    const b2 = document.getElementById("copyLink2Btn");
+
+    if (b1) b1.onclick = () => { navigator.clipboard.writeText(liveLink1); showCopyToast(); };
+    if (b2) b2.onclick = () => { navigator.clipboard.writeText(liveLink2); showCopyToast(); };
+});
+
+
+function showCopyToast(){
+    const t=document.getElementById("copyToast");
+    t.style.display="block";
+    setTimeout(()=>{ t.style.display="none"; },1800);
+}
+
+</script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
@@ -346,13 +385,107 @@
             overflow-y: auto; /* Enable scrolling for the content itself */
         }
         
-    </style>
+    
+        /* ----------------------------------------- */
+        /* NEW POPUP LIVE PLAYER MODAL */
+        /* ----------------------------------------- */
+        #livePlayerModal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            display: none; /* hidden by default */
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #livePlayerBox {
+            width: 95%;
+            max-width: 900px;
+            height: 70vh;
+            background: #000;
+            border: 2px solid #ff4d4d;
+            border-radius: 12px;
+            box-shadow: 0 0 25px #ff4d4d;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #liveIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #closeLivePopup {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            font-size: 28px;
+            color: white;
+            cursor: pointer;
+            z-index: 10000;
+        }
+
+/* Neon popup enhancements */
+#copyLinksModal .modal-box {
+    animation: neonPop 0.4s ease-out;
+    box-shadow: 0 0 25px #a855f7, 0 0 50px #9333ea;
+}
+@keyframes neonPop {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.toast {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #10b981;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    display: none;
+    box-shadow: 0 0 10px #10b981;
+    animation: fadeInOut 2s ease-out;
+}
+@keyframes fadeInOut {
+    0% { opacity:0; transform: translateY(20px);}
+    10% { opacity:1; transform: translateY(0);}
+    90% { opacity:1; }
+    100% { opacity:0; transform: translateY(20px);}
+}
+
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
     <!-- Data Structure and JS Logic -->
     <script>
-        const syllabusData = {
+        
+    /* ----------------------------------------- */
+    /* NEW FUNCTION: OPEN/CLOSE LIVE POPUP (NO REDIRECT) */
+    /* ----------------------------------------- */
+    function openLivePopup() {
+        const modal = document.getElementById('livePlayerModal');
+        const iframe = document.getElementById('liveIframe');
+        if (!modal || !iframe) return;
+        iframe.src = 'https://rdxdslive.vercel.app';
+        modal.style.display = 'flex';
+        // prevent body scroll
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLivePopup() {
+        const modal = document.getElementById('livePlayerModal');
+        const iframe = document.getElementById('liveIframe');
+        if (!modal || !iframe) return;
+        iframe.src = '';
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+const syllabusData = {
             // UPDATED LIVE CARD
             'LIVE': {
                 color: '#ff4d4d', // Red for Live
@@ -361,7 +494,7 @@
                 progress: 100, // Always active
                 cssClass: 'folder-live',
                 // *** LIVE SUBJECT CARD LINK: UPDATED to the new playlist link (10s delay) ***
-                playlistUrl: 'https://youtube.com/playlist?list=PLvN1F_xGUFE4qDgi5hPOjJOLiqmbAI2Qd&si=bm2DDI_gjiFhlhJ' 
+                playlistUrl: 'https://rdxdslive.vercel.app' 
             },
             'SST': {
                 color: '#ff4500',
@@ -737,7 +870,7 @@
             // 5. Setup LIVE Stream button (Hero Section) for delayed redirect (10s delay)
             const liveStreamBtn = document.getElementById('live-stream-btn');
             if (liveStreamBtn) {
-                liveStreamBtn.onclick = (e) => handleDelayedRedirect(e, liveStreamBtn.getAttribute('data-href'), 10);
+                liveStreamBtn.onclick = (e) => { e.preventDefault(); openLivePopup(); };
             }
             
             // 6. Setup VIEW FULL PLAN button to open Roadmap Modal and render content
@@ -839,9 +972,17 @@
             </a>
 
             <!-- LIVE RED BUTTON (10s delay) - UPDATED LINK -->
-            <a id="live-stream-btn" data-href="https://youtube.com/playlist?list=PLvN1F_xGUFE4qDgi5hPOjJOLiqmbAI2Qd&si=bm2DDI_gjiFhlhJ" target="_blank" class="w-full btn-neon bg-red-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-red-500 transition-all duration-300 shadow-lg flex items-center justify-center gap-2 live-red-glow mt-4">
-                <i class="fa-solid fa-signal text-lg"></i> <span class="tracking-widest">LIVE NOW - WATCH HERE!</span>
-            </a>
+            <button id="live-stream-btn" onclick="openLivePopup()" class="w-full btn-neon bg-red-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-red-500 transition-all duration-300 shadow-lg flex items-center justify-center gap-2 live-red-glow mt-4">
+                <i class="fa-solid fa-signal text-lg"></i>
+                <span class="tracking-widest">LIVE NOW - WATCH HERE!</span>
+            </button>
+
+<button 
+    onclick="openCopyLinksPopup()"
+    class="btn-neon bg-purple-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-purple-500 transition shadow-lg mt-4">
+    COPY LIVE LINKS
+</button>
+
         </div>
     </header>
 
@@ -886,7 +1027,7 @@
     
     <!-- Notice Modal Structure (Message Box instead of alert) -->
     <div id="notice-modal" class="fixed inset-0 bg-black bg-opacity-70 z-[100] hidden items-center justify-center p-4">
-        <div class="bg-gray-900 border border-cyan-500 rounded-xl p-8 w-full max-w-md shadow-2xl shadow-cyan-900/50 transform transition-all duration-300 scale-100">
+        <div class="modal-box bg-gray-900 border border-cyan-500 rounded-xl p-8 w-full max-w-md shadow-2xl shadow-cyan-900/50 transform transition-all duration-300 scale-100">
             <h3 class="text-2xl text-cyan-400 font-bold mb-4 flex items-center">
                 <i class="fa-solid fa-bullhorn mr-3"></i> Important Notice
             </h3>
@@ -953,5 +1094,59 @@
             </div>
         </div>
     </div>
+
+<!-- ======================================================= -->
+<!--        NEW LIVE STREAM POPUP MODAL (IFRAME PLAYER)       -->
+<!-- ======================================================= -->
+
+<div id="livePlayerModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[5000] flex items-center justify-center p-4">
+
+    <div id="livePlayerBox" class="relative w-full max-w-3xl h-[70vh] rounded-xl border-2 border-red-500 shadow-[0_0_25px_red] bg-black overflow-hidden">
+
+        <!-- CLOSE BUTTON -->
+        <span id="closeLivePopup" onclick="closeLivePopup()"
+              class="absolute top-3 right-4 text-white text-3xl cursor-pointer hover:text-red-400 transition">
+            <i class="fa-solid fa-circle-xmark"></i>
+        </span>
+
+        <!-- IFRAME THAT LOADS rdxdslive.vercel.app -->
+        <iframe id="liveIframe" src="" allowfullscreen loading="lazy"></iframe>
+    </div>
+
+</div>
+
+<!-- ================= COPY LINKS POPUP ================= -->
+
+<div id="copyLinksModal" 
+     class="hidden fixed inset-0 bg-black bg-opacity-70 z-[6000] flex items-center justify-center p-4">
+
+    <div class="bg-gray-900 border border-purple-500 rounded-xl p-8 w-full max-w-md">
+
+        <h3 class="text-2xl text-purple-400 font-bold mb-4">
+            Live Links (Daily)
+        </h3>
+
+        <div class="space-y-4">
+            <button id="copyLink1Btn" 
+                    class="w-full bg-purple-600 text-white py-2 rounded-lg font-bold hover:bg-purple-500">
+                Copy Live Link 🖇️ 1
+            </button>
+
+            <button id="copyLink2Btn" 
+                    class="w-full bg-purple-600 text-white py-2 rounded-lg font-bold hover:bg-purple-500">
+                Copy Live Link 🖇️ 2
+            </button>
+        </div>
+
+        <button onclick="closeCopyLinksPopup()"
+                class="w-full mt-6 bg-gray-700 text-white py-2 rounded-lg font-bold hover:bg-gray-600">
+            CLOSE
+        </button>
+    </div>
+</div>
+
+
+<div id="copyToast" class="toast">Copied ✓</div>
+
 </body>
 </html>
