@@ -4,46 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>rdxdebanshu@7 | NT ABHAY 2025-26 (Playlist Focused)</title>
-    <script src="https://cdn.tailwindcss.com">
-/* ================= COPY LINKS SCRIPT ================ */
-let liveLink1 = "";
-let liveLink2 = "";
-
-// Load daily links from JSON file
-fetch("/live-links.json")
-    .then(res => res.json())
-    .then(data => {
-        liveLink1 = data.link1;
-        liveLink2 = data.link2;
-    });
-
-// Show popup
-function openCopyLinksPopup() {
-    document.getElementById("copyLinksModal").style.display = "flex";
-}
-
-// Close popup
-function closeCopyLinksPopup() {
-    document.getElementById("copyLinksModal").style.display = "none";
-}
-
-// Copy Btns
-document.addEventListener("DOMContentLoaded", () => {
-    const b1 = document.getElementById("copyLink1Btn");
-    const b2 = document.getElementById("copyLink2Btn");
-
-    if (b1) b1.onclick = () => { navigator.clipboard.writeText(liveLink1); showCopyToast(); };
-    if (b2) b2.onclick = () => { navigator.clipboard.writeText(liveLink2); showCopyToast(); };
-});
-
-
-function showCopyToast(){
-    const t=document.getElementById("copyToast");
-    t.style.display="block";
-    setTimeout(()=>{ t.style.display="none"; },1800);
-}
-
-</script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
@@ -428,40 +389,102 @@ function showCopyToast(){
             z-index: 10000;
         }
 
-/* Neon popup enhancements */
-#copyLinksModal .modal-box {
-    animation: neonPop 0.4s ease-out;
-    box-shadow: 0 0 25px #a855f7, 0 0 50px #9333ea;
-}
-@keyframes neonPop {
-    0% { transform: scale(0.7); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-.toast {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    background: #10b981;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-weight: bold;
-    display: none;
-    box-shadow: 0 0 10px #10b981;
-    animation: fadeInOut 2s ease-out;
-}
-@keyframes fadeInOut {
-    0% { opacity:0; transform: translateY(20px);}
-    10% { opacity:1; transform: translateY(0);}
-    90% { opacity:1; }
-    100% { opacity:0; transform: translateY(20px);}
-}
+        /* Neon popup enhancements */
+        /* FIX: Ensure .modal-box class is applied to the inner div of the copy links modal */
+        #copyLinksModal .modal-box {
+            animation: neonPop 0.4s ease-out;
+            box-shadow: 0 0 25px #a855f7, 0 0 50px #9333ea;
+        }
+        @keyframes neonPop {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+            box-shadow: 0 0 10px #10b981;
+            animation: fadeInOut 2s ease-out;
+            z-index: 7000; /* Increased z-index */
+        }
+        @keyframes fadeInOut {
+            0% { opacity:0; transform: translateY(20px);}
+            10% { opacity:1; transform: translateY(0);}
+            90% { opacity:1; }
+            100% { opacity:0; transform: translateY(20px);}
+        }
 
-</style>
+    </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Data Structure and JS Logic -->
+<script>
+let liveLink1 = "";
+let liveLink2 = "";
+
+// Load daily links from JSON file
+// Ensure live-links.json is in the root directory relative to this HTML
+fetch("./live-links.json")
+    .then(res => {
+        if (!res.ok) { throw new Error("HTTP error " + res.status); }
+        return res.json();
+    })
+    .then(data => {
+        console.log("Links loaded:", data); // Debugging log
+        liveLink1 = data.link1;
+        liveLink2 = data.link2;
+    })
+    .catch(err => {
+        console.error("Failed to load links:", err);
+    });
+
+// Show popup
+function openCopyLinksPopup() {
+    // FIX: Using style.display = 'flex' to show it, removing 'hidden' class isn't strictly necessary if using style but good for cleanup
+    const modal = document.getElementById("copyLinksModal");
+    modal.classList.remove("hidden");
+    modal.style.display = "flex";
+}
+
+// Close popup
+function closeCopyLinksPopup() {
+    const modal = document.getElementById("copyLinksModal");
+    modal.style.display = "none";
+    modal.classList.add("hidden");
+}
+
+// Copy Btns Logic
+document.addEventListener("DOMContentLoaded", () => {
+    const b1 = document.getElementById("copyLink1Btn");
+    const b2 = document.getElementById("copyLink2Btn");
+
+    if (b1) b1.onclick = () => { 
+        if(!liveLink1) { alert("Link 1 not loaded yet!"); return; }
+        navigator.clipboard.writeText(liveLink1); 
+        showCopyToast(); 
+    };
+    if (b2) b2.onclick = () => { 
+        if(!liveLink2) { alert("Link 2 not loaded yet!"); return; }
+        navigator.clipboard.writeText(liveLink2); 
+        showCopyToast(); 
+    };
+});
+
+
+function showCopyToast(){
+    const t = document.getElementById("copyToast");
+    t.style.display = "block";
+    setTimeout(() => { t.style.display = "none"; }, 1800);
+}
+</script>
+
+
     <script>
         
     /* ----------------------------------------- */
@@ -759,17 +782,14 @@ const syllabusData = {
                 // Inject the pulse ring for the LIVE card, and ensure all existing content is wrapped 
                 // in a relative z-20 div to stay on top of the absolutely positioned ring.
                 link.innerHTML = `
-                    <!-- NEW PULSE RING ELEMENT (Only for LIVE card) -->
                     ${isLive ? '<div class="live-card-pulse-ring"></div>' : ''} 
                     
-                    <!-- Content Wrapper to stay above the pulse ring (z-index: 20) -->
                     <div class="relative z-20 h-full flex flex-col justify-between"> 
                         <div class="flex justify-between items-start">
                             <i class="fa-solid ${data.icon} text-4xl ${mainIconColor} ${pulseClass} transition-colors duration-500"></i>
                             <span class="text-xs text-gray-500 border border-gray-700 px-2 py-0.5 rounded-full ${pulseClass}">${isLive ? 'ACTIVE NOW' : '45 Days'}</span>
                         </div>
                         <div class="mt-8">
-                            <!-- Using the dynamic subjectTitle with Wi-Fi icon -->
                             <h3 class="text-3xl font-bold mb-1 tracking-wider ${pulseClass}">${subjectTitle}</h3>
                             <p class="text-sm text-gray-400">${data.description}</p>
                             <div class="mt-4 w-full h-1 bg-gray-800 rounded">
@@ -892,7 +912,6 @@ const syllabusData = {
 
     </script>
 
-    <!-- Navbar -->
     <nav class="w-full p-6 flex justify-between items-center border-b border-gray-900 bg-black/70 sticky top-0 z-50 backdrop-blur-md">
         <div class="flex items-center gap-3">
             <i class="fa-solid fa-robot text-cyan-400 text-2xl animate-pulse"></i>
@@ -910,7 +929,6 @@ const syllabusData = {
         </button>
     </nav>
 
-    <!-- Hero Section -->
     <header class="flex flex-col items-center justify-center py-20 px-4 text-center relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-900/10 via-black to-black -z-10"></div>
         
@@ -918,12 +936,10 @@ const syllabusData = {
             Target 45-Days Mission
         </div>
         
-        <!-- UPDATED TIMER DISPLAY -->
         <div id="countdown-timer" class="text-3xl md:text-5xl font-extrabold mb-8 timer-glow border-b-2 border-cyan-500/50 pb-2 tracking-widest">
             --d --h --m --s
         </div>
         
-        <!-- Main Title: NT ABHAY 2025-26 - NOW WITH GRADIENT -->
         <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 leading-tight text-white">
             NT ABHAY <span class="text-gradient-neon">2025-26</span>
         </h1>
@@ -932,74 +948,61 @@ const syllabusData = {
             Syllabus domination starts here. Click any subject card to launch the full YouTube Playlist.
         </p>
 
-        <!-- Progress Bar Mockup -->
         <div class="w-full max-w-xl bg-gray-900 rounded-full h-3 mb-2 border border-gray-700 relative overflow-hidden group">
             <div class="bg-gradient-to-r from-cyan-500 to-purple-500 h-3 rounded-full relative w-[100%] transition-all duration-1500 ease-in-out shadow-[0_0_8px_rgba(0,243,255,0.5)]"></div>
         </div>
         <span class="text-xs text-cyan-400 mb-12 tracking-widest font-bold">6/7 SUBJECTS ACQUIRED (100% SYLLABUS ACQUIRED)</span>
 
-        <!-- Modified Button Layout -->
         <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4 w-full max-w-4xl">
             
-            <!-- START LEARNING BUTTON (Primary CTA) -->
             <button onclick="scrollToGrid()" class="btn-neon bg-cyan-500 text-gray-900 px-8 py-3 rounded-lg font-bold hover:bg-cyan-400 transition-all duration-300 shadow-lg shadow-cyan-800/50">
                 START LEARNING
             </button>
             
-            <!-- NOTICE BUTTON -->
             <button id="notice-button" class="btn-neon btn-neon-yellow bg-yellow-500 text-gray-900 px-8 py-3 rounded-lg font-bold hover:bg-yellow-400 transition-all duration-300 shadow-lg flex items-center justify-center gap-2">
                <i class="fa-solid fa-bell"></i> NOTICE BOARD
             </button>
             
-            <!-- ALL SUBJECT NOTES BUTTON -->
             <a id="all-notes-link" data-href="https://drive.google.com/drive/folders/1zyTwmoMiZvZ2Cnl1EJol_JeOg0mDF6P_?usp=drive_link" target="_blank" class="btn-neon border border-red-500 text-red-400 px-8 py-3 rounded-lg font-bold hover:bg-red-700 hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
                 <i class="fa-brands fa-google-drive"></i> ALL NOTES (DRIVE)
             </a>
             
-            <!-- EXTRA RESOURCES BUTTON (NOW GREEN WITH DPP GLOW) -->
             <a id="extra-resources-link" data-href="https://drive.google.com/drive/folders/1B_I5Ugvcp8VlB05eJh-c2Ts3D01XnHGi?usp=drive_link" target="_blank" class="btn-neon btn-neon-green-dpp bg-green-600 text-white px-8 py-3 rounded-lg font-bold transition-all duration-300 flex items-center justify-center gap-2 hover:bg-green-500">
                 <i class="fa-solid fa-folder-open"></i> EXTRA RESOURCES
             </a>
             
-            <!-- VIEW FULL PLAN BUTTON (ELECTRIC BLUE/CYAN) -->
             <button id="view-full-plan-btn" class="btn-neon btn-neon-blue-plan bg-sky-500 text-white px-8 py-3 rounded-lg font-bold hover:bg-sky-400 transition-all duration-300 shadow-lg shadow-cyan-800/50 flex items-center justify-center gap-2">
                 <i class="fa-solid fa-calendar-alt"></i> VIEW FULL PLAN
             </button>
             
-            <!-- TEST LIVE BUTTON (Silver White Glow) - LINK UPDATED HERE -->
             <a id="test-live-link" data-href="https://drive.google.com/drive/folders/1rd1mJGmufkHa6I_EXg3ygB5kRGmO47oY?usp=sharing" target="_blank" class="btn-neon btn-neon-silver text-white px-8 py-3 rounded-lg font-bold transition-all duration-300 flex items-center justify-center gap-2">
                 <i class="fa-solid fa-cloud-bolt"></i> TEST LIVE
             </a>
 
-            <!-- LIVE RED BUTTON (10s delay) - UPDATED LINK -->
             <button id="live-stream-btn" onclick="openLivePopup()" class="w-full btn-neon bg-red-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-red-500 transition-all duration-300 shadow-lg flex items-center justify-center gap-2 live-red-glow mt-4">
                 <i class="fa-solid fa-signal text-lg"></i>
                 <span class="tracking-widest">LIVE NOW - WATCH HERE!</span>
             </button>
 
-<button 
-    onclick="openCopyLinksPopup()"
-    class="btn-neon bg-purple-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-purple-500 transition shadow-lg mt-4">
-    COPY LIVE LINKS
-</button>
+            <button 
+                onclick="openCopyLinksPopup()"
+                class="btn-neon bg-purple-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-purple-500 transition shadow-lg mt-4">
+                COPY LIVE LINKS
+            </button>
 
         </div>
     </header>
 
-    <!-- Subject Grid -->
     <main id="subjects" class="container mx-auto px-4 py-16 flex-grow">
         <h2 class="text-3xl mb-12 text-center border-b border-gray-900 pb-4">
             <i class="fa-solid fa-laptop-code mr-2 text-gray-500"></i> ACCESS <span class="text-cyan-400">PLAYLISTS</span>
         </h2>
 
-        <!-- The ID 'full-subject-grid' MUST be here for the JS function renderSubjectGrid to work -->
         <div id="full-subject-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-8 mb-20">
-            <!-- Subject cards will be injected here by renderSubjectGrid() -->
-        </div>
+            </div>
 
     </main>
     
-    <!-- Footer -->
     <footer class="border-t border-gray-900 bg-black/90 py-8 mt-auto">
         <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
             <div class="mb-4 md:mb-0">
@@ -1007,7 +1010,6 @@ const syllabusData = {
                 <p class="text-gray-600 text-sm">Empowering students for 2025-26.</p>
             </div>
             <div class="flex gap-4">
-                <!-- NEW GMAIL CONTACT LINK (UPDATED to zohomail.in) -->
                 <a href="mailto:rdxdebanshu@zohomail.in" class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center text-gray-400 hover:text-red-400 hover:border-red-400 hover:shadow-[0_0_5px_#f87171] transition-all duration-300" title="Contact via Email">
                     <i class="fa-solid fa-envelope"></i>
                 </a>
@@ -1025,7 +1027,6 @@ const syllabusData = {
         </div>
     </footer>
     
-    <!-- Notice Modal Structure (Message Box instead of alert) -->
     <div id="notice-modal" class="fixed inset-0 bg-black bg-opacity-70 z-[100] hidden items-center justify-center p-4">
         <div class="modal-box bg-gray-900 border border-cyan-500 rounded-xl p-8 w-full max-w-md shadow-2xl shadow-cyan-900/50 transform transition-all duration-300 scale-100">
             <h3 class="text-2xl text-cyan-400 font-bold mb-4 flex items-center">
@@ -1041,7 +1042,6 @@ const syllabusData = {
         </div>
     </div>
     
-    <!-- Redirection Delay Modal (Updated for dynamic timing) -->
     <div id="redirect-delay-modal" class="fixed inset-0 bg-black bg-opacity-80 z-[200] hidden items-center justify-center p-4">
         <div class="bg-gray-900 border border-red-500 rounded-xl p-8 w-full max-w-md shadow-2xl shadow-red-900/50 transform transition-all duration-300 scale-100 text-center">
             <h3 class="text-2xl text-red-400 font-bold mb-4 flex items-center justify-center">
@@ -1063,19 +1063,15 @@ const syllabusData = {
         </div>
     </div>
 
-    <!-- Full Roadmap Modal (New Structure) -->
     <div id="roadmap-modal" class="fixed inset-0 bg-black bg-opacity-90 z-[300] hidden items-center justify-center p-4 overflow-y-auto">
-        <!-- Replaced border-4 border-blue-600 with border-4 border-sky-500 and shadow to cyan-600 -->
         <div class="relative bg-gray-950 border-4 border-sky-500 rounded-xl w-full max-w-5xl my-8 shadow-[0_0_50px_rgba(6,182,212,0.8)] transform transition-all duration-500 roadmap-modal-content">
             
-            <!-- Close Button -->
             <button onclick="document.getElementById('roadmap-modal').style.display = 'none'" 
                     class="sticky top-0 right-0 m-4 text-white text-3xl hover:text-red-500 transition duration-300 z-50 p-2 bg-gray-950 rounded-full">
                 <i class="fa-solid fa-circle-xmark"></i>
             </button>
 
             <div class="p-6 md:p-10 pt-0">
-                <!-- Changed text-blue-400 to text-sky-400 -->
                 <h2 class="text-4xl md:text-5xl font-extrabold text-sky-400 mb-2 tracking-wider text-center border-b-2 border-sky-500/50 pb-2">
                     <i class="fa-solid fa-sitemap mr-3"></i> CBSE CLASS 10 CRASH COURSE
                 </h2>
@@ -1083,10 +1079,8 @@ const syllabusData = {
                     45-Day Mission Roadmap | Phase-wise Syllabus Acquisition Plan
                 </p>
     
-                <!-- Roadmap Content Container -->
                 <div id="roadmap-content" class="w-full max-w-4xl mx-auto py-4">
-                    <!-- Content generated by renderRoadmap() function will go here -->
-                </div>
+                    </div>
                 
                 <p class="text-center text-sm text-gray-600 mt-10 border-t border-gray-800 pt-4">
                     *This plan is an agile guide and may be subject to minor adjustments based on live session requirements.
@@ -1095,32 +1089,24 @@ const syllabusData = {
         </div>
     </div>
 
-<!-- ======================================================= -->
-<!--        NEW LIVE STREAM POPUP MODAL (IFRAME PLAYER)       -->
-<!-- ======================================================= -->
-
 <div id="livePlayerModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[5000] flex items-center justify-center p-4">
 
     <div id="livePlayerBox" class="relative w-full max-w-3xl h-[70vh] rounded-xl border-2 border-red-500 shadow-[0_0_25px_red] bg-black overflow-hidden">
 
-        <!-- CLOSE BUTTON -->
         <span id="closeLivePopup" onclick="closeLivePopup()"
               class="absolute top-3 right-4 text-white text-3xl cursor-pointer hover:text-red-400 transition">
             <i class="fa-solid fa-circle-xmark"></i>
         </span>
 
-        <!-- IFRAME THAT LOADS rdxdslive.vercel.app -->
         <iframe id="liveIframe" src="" allowfullscreen loading="lazy"></iframe>
     </div>
 
 </div>
 
-<!-- ================= COPY LINKS POPUP ================= -->
-
 <div id="copyLinksModal" 
-     class="hidden fixed inset-0 bg-black bg-opacity-70 z-[6000] flex items-center justify-center p-4">
+     class="hidden fixed inset-0 bg-black bg-opacity-70 z-[6000] items-center justify-center p-4">
 
-    <div class="bg-gray-900 border border-purple-500 rounded-xl p-8 w-full max-w-md">
+    <div class="modal-box bg-gray-900 border border-purple-500 rounded-xl p-8 w-full max-w-md relative">
 
         <h3 class="text-2xl text-purple-400 font-bold mb-4">
             Live Links (Daily)
@@ -1128,23 +1114,22 @@ const syllabusData = {
 
         <div class="space-y-4">
             <button id="copyLink1Btn" 
-                    class="w-full bg-purple-600 text-white py-2 rounded-lg font-bold hover:bg-purple-500">
+                    class="w-full bg-purple-600 text-white py-2 rounded-lg font-bold hover:bg-purple-500 transition shadow-lg hover:shadow-purple-500/50">
                 Copy Live Link 🖇️ 1
             </button>
 
             <button id="copyLink2Btn" 
-                    class="w-full bg-purple-600 text-white py-2 rounded-lg font-bold hover:bg-purple-500">
+                    class="w-full bg-purple-600 text-white py-2 rounded-lg font-bold hover:bg-purple-500 transition shadow-lg hover:shadow-purple-500/50">
                 Copy Live Link 🖇️ 2
             </button>
         </div>
 
         <button onclick="closeCopyLinksPopup()"
-                class="w-full mt-6 bg-gray-700 text-white py-2 rounded-lg font-bold hover:bg-gray-600">
+                class="w-full mt-6 bg-gray-700 text-white py-2 rounded-lg font-bold hover:bg-gray-600 transition">
             CLOSE
         </button>
     </div>
 </div>
-
 
 <div id="copyToast" class="toast">Copied ✓</div>
 
